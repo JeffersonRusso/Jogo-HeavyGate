@@ -1,0 +1,201 @@
+#include "eth_util.angelscript"
+#include "Collide.angelscript"
+#include "Skills_Inimigos.angelscript"
+class InimigoFrame
+{
+
+private frameTimer inimigoTimer;
+
+private string LocalAnim1;
+private float LocalAnim2;
+private int SpeedAnim;
+
+ETHEntity @Inimigo1;
+	 
+	void Movimentacao(ETHEntity @thisEntity, int distance){
+	
+	setLocalAnim1("Heroina.ent");
+	vector2 v3Dir(0,0);
+	const float speed = UnitsPerSecond(100.0f);
+	const uint stride1 = 100;
+	
+	ETHEntity @playerEntity = SeekEntity(getLocalAnim1());
+	
+	
+	vector2 playerPosition = playerEntity.GetPositionXY();
+	vector2 currentPosition = thisEntity.GetPositionXY();
+	
+	
+	
+	int xSubtract = currentPosition.x - playerPosition.x; 
+	int ySubtract = currentPosition.y - playerPosition.y;
+	
+	if ( xSubtract > 0 && xSubtract < distance &&  ySubtract < distance && ySubtract > 0 )
+	{	
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1), findDirectionRowIndex(getAngle(v3Dir)));	
+		v3Dir.x += -1;
+		v3Dir.y += -1;
+	}
+	
+	else if (xSubtract < 0 && xSubtract > (distance) &&  ySubtract > (-1 * distance) && ySubtract < 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));	
+		v3Dir.y += 1;
+		v3Dir.x += 1;
+	}
+	
+	else if (xSubtract < 0 && xSubtract > (-1 * distance) &&  ySubtract < distance && ySubtract > 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));	
+		v3Dir.x += 1;
+		v3Dir.y += -1;
+	}
+	
+	else if (xSubtract > 0 && xSubtract < distance &&  ySubtract > (-1 * distance) && ySubtract < 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));	
+		v3Dir.x += -1;
+		v3Dir.y += 1;
+	}
+	else if (xSubtract == 0 )
+	{
+		if (ySubtract > 50 && ySubtract < distance){
+			thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));
+			v3Dir.y += -1;
+			
+			
+		}
+		else if (ySubtract < 50 && ySubtract > (-1* distance)){
+			thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));
+			v3Dir.y += 1;
+		}
+	}
+	
+	else if (ySubtract == 0 )
+	{
+		if (xSubtract > 50 && xSubtract < distance){
+			thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(vector2(-1,0))));
+			v3Dir.x += -1;
+		}
+		else if (xSubtract < 50 && xSubtract > (-1 * distance)){
+			thisEntity.SetFrame(charaTimer.Set(0,3,stride1),findDirectionRowIndex(getAngle(v3Dir)));
+			v3Dir.x += 1;
+		}
+	}
+	
+		
+	
+	// move the character
+	v3Dir = normalize(v3Dir)*speed;
+	thisEntity.AddToPositionXY(v3Dir);	
+	// if it collides, stop it.
+	if (CollideStatic(thisEntity))
+	{
+		thisEntity.AddToPositionXY(v3Dir*-1);
+	}
+	
+
+	// cast a weak light around the character
+	AddLight(thisEntity.GetPosition() + vector3(0, 0, 32), vector3(0.26f,0.2f,0.26f), 100.0f, true);
+	
+}
+void Chase1(ETHEntity @thisEntity, int distance){
+	
+	vector3 v3Dir(0,0,0);
+	const float speed = UnitsPerSecond(100.0f);
+	const uint stride1 = 100;
+	
+	ETHEntity @playerEntity = SeekEntity("Heroina.ent");
+	
+	vector2 playerPosition = playerEntity.GetPositionXY();
+	vector2 currentPosition = thisEntity.GetPositionXY();
+	
+	int xSubtract = currentPosition.x - playerPosition.x; 
+	int ySubtract = currentPosition.y - playerPosition.y;
+	
+	if ( xSubtract > 0 && xSubtract < distance &&  ySubtract < distance && ySubtract > 0 )
+	{	
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),1);	
+		v3Dir.x += -1;
+		v3Dir.y += -1;
+	}
+	
+	else if (xSubtract < 0 && xSubtract > (-1 * distance) &&  ySubtract > (-1 * distance) && ySubtract < 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),0);	
+		v3Dir.y += 1;
+		v3Dir.x += 1;
+	}
+	
+	else if (xSubtract < 0 && xSubtract > (-1 * distance) &&  ySubtract < distance && ySubtract > 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),2);	
+		v3Dir.x += 1;
+		v3Dir.y += -1;
+	}
+	
+	else if (xSubtract > 0 && xSubtract < distance &&  ySubtract > (-1 * distance) && ySubtract < 0)
+	{
+		thisEntity.SetFrame(charaTimer.Set(0,3,stride1),0);	
+		v3Dir.x += -1;
+		v3Dir.y += 1;
+	}
+	//////////////
+
+	
+	// move the character
+	v3Dir = normalize(v3Dir)*speed;
+	thisEntity.AddToPosition(v3Dir);
+	
+	// if it collides, stop it.
+	if (Collide(thisEntity))
+	{
+		thisEntity.AddToPosition(v3Dir*-1);
+	}
+	
+	// cast a weak light over the character to let the player see it even in the dark
+	AddLight(thisEntity.GetPosition()+vector3(0,0,32), vector3(0.15f,0.1f,0.15f), 100.0f, true);
+	
+}
+	
+
+	uint findDirectionRowIndex1(const float radianAngle)
+	{
+	
+	const float LOWER_RIGHT_DIRECTION1 =  PI / 4.0f;
+	const float UPPER_RIGHT_DIRECTION1 =  (PI / 2.0f) + (PI / 4.0f);
+	const float UPPER_LEFT_DIRECTION1  =  PI + (PI / 4.0f);
+	const float LOWER_LEFT_DIRECTION1  =  PI + (PI / 4.0f) + (PI / 2.0f);
+
+	if (radianAngle >= LOWER_RIGHT_DIRECTION1 && radianAngle < UPPER_RIGHT_DIRECTION1)
+		return 2;
+	else if (radianAngle >= UPPER_RIGHT_DIRECTION1 && radianAngle < UPPER_LEFT_DIRECTION1)
+		return 3;
+	else if (radianAngle >= UPPER_LEFT_DIRECTION1 && radianAngle < LOWER_LEFT_DIRECTION1)
+		return 1;
+	else
+		return 0;
+
+	}
+	
+	string getLocalAnim1()
+	{
+		return LocalAnim1;
+	}
+
+	void setLocalAnim1(const string _LocalAnim1)
+	{
+		LocalAnim1 = _LocalAnim1;
+	}
+	float getSpeedAnim()
+	{
+		return SpeedAnim;
+	}
+
+	void setSpeedAnim(const float _SpeedAnim)
+	{
+		SpeedAnim = _SpeedAnim;
+	}
+	
+	
+}

@@ -1,0 +1,10 @@
+default
+{
+	title = Teste de Menus;
+	richLighting = true;
+
+	width = 1024;
+	height = 768;
+	windowed = true;
+	vsync = true;
+}

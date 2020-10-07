@@ -1,0 +1,7 @@
+[C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Jogo-HeavyGate\Alfa\_warning.log.txt]
+
+AngelScript WARNING (C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Jogo-HeavyGate\Alfa\Scene.angelscript line 43): 
+Signed/Unsigned mismatch
+
+AngelScript WARNING (C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Jogo-HeavyGate\Alfa\Scene.angelscript line 84): 
+Signed/Unsigned mismatch

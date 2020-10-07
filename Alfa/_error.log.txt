@@ -1,0 +1,8 @@
+[C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Alfa\_error.log.txt]
+ETHScene::Open: file not found (C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Alfa\bugteste3.esc)
+Function: void BattleScene::onCreated()
+Section: C:\Users\Proevento\Desktop\Jogo - Heavy Gate\Alfa\BattleScene.angelscript
+Line: 22
+Description: Index out of bounds
+
+ERROR - Exception: Index out of bounds
